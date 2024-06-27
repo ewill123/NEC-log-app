@@ -23,7 +23,7 @@ function withinAllowedTime() {
   const end = new Date();
 
   start.setHours(6, 0, 0); // 6:00 AM
-  end.setHours(9, 30, 0); // 9:30 am
+  end.setHours(25, 0, 0); // 9:30 am
 
   return now >= start && now <= end;
 }
