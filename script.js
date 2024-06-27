@@ -86,6 +86,8 @@ function getAllUsers() {
     { name: "Charlie", password: "123" },
     { name: "Emmanuel", password: "123" },
     { name: "Isaac Zahn", password: "1472" },
+    { name: "Anthony K. Sengbe", password: "123" },
+
     // Add more users as needed
   ];
 }
