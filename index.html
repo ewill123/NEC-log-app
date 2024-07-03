@@ -27,9 +27,169 @@
       defer
       src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include Chart.js -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         emailjs.init("service_6u734sn");
+
+        // Sample attendance data
+        let attendanceData = [
+          { name: "Alice", time: "2024-07-01 08:00:00", gender: "female" },
+          { name: "Bob", time: "2024-07-01 08:05:00", gender: "male" },
+          { name: "Charlie", time: "2024-07-01 08:10:00", gender: "male" },
+          // Add more data as needed
+        ];
+
+        // Group data by date
+        function groupByDate(data, interval) {
+          return data.reduce((acc, curr) => {
+            const date = new Date(curr.time);
+            let key;
+            switch (interval) {
+              case "daily":
+                key = date.toLocaleDateString();
+                break;
+              case "weekly":
+                const weekNumber = Math.ceil(date.getDate() / 7);
+                key = `${date.getFullYear()}-W${weekNumber}`;
+                break;
+              case "monthly":
+                key = `${date.getFullYear()}-${date.getMonth() + 1}`;
+                break;
+              case "yearly":
+                key = `${date.getFullYear()}`;
+                break;
+            }
+            if (!acc[key]) {
+              acc[key] = [];
+            }
+            acc[key].push(curr);
+            return acc;
+          }, {});
+        }
+
+        // Analyze male and female attendance
+        function analyzeGender(data) {
+          let maleCount = 0;
+          let femaleCount = 0;
+          data.forEach((entry) => {
+            if (entry.gender === "male") {
+              maleCount++;
+            } else if (entry.gender === "female") {
+              femaleCount++;
+            }
+          });
+          return { male: maleCount, female: femaleCount };
+        }
+
+        // Update the analysis summary
+        function updateAnalysisSummary(analysis) {
+          const summary = document.getElementById("analysisSummary");
+          summary.innerHTML = `
+                    <p>Male: ${analysis.male}</p>
+                    <p>Female: ${analysis.female}</p>
+                `;
+        }
+
+        // Initialize the chart
+        const ctx = document.getElementById("attendanceChart").getContext("2d");
+        const attendanceChart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: [], // Dates will be added dynamically
+            datasets: [
+              {
+                label: "Number of Logins",
+                data: [], // Data points will be added dynamically
+                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                borderColor: "rgba(75, 192, 192, 1)",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              x: {
+                type: "time",
+                time: {
+                  unit: "day",
+                },
+                title: {
+                  display: true,
+                  text: "Date",
+                },
+              },
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "Number of Logins",
+                },
+              },
+            },
+          },
+        });
+
+        // Update the chart with new data
+        function updateChart(data, interval) {
+          const groupedData = groupByDate(data, interval);
+          const labels = Object.keys(groupedData);
+          const logins = labels.map((date) => groupedData[date].length);
+          attendanceChart.data.labels = labels;
+          attendanceChart.data.datasets[0].data = logins;
+          attendanceChart.update();
+
+          const analysis = analyzeGender(data);
+          updateAnalysisSummary(analysis);
+        }
+
+        // Initial update with existing data
+        updateChart(attendanceData, "daily");
+
+        // Handle dropdown change for analysis view
+        document
+          .getElementById("analysisSelect")
+          .addEventListener("change", (event) => {
+            const selectedValue = event.target.value;
+            updateChart(attendanceData, selectedValue);
+          });
+
+        // Download log and analysis
+        document
+          .getElementById("downloadButton")
+          .addEventListener("click", () => {
+            const table = document.getElementById("chatLogTable");
+            const analysisCanvas = document.getElementById("attendanceChart");
+
+            // Download table as image
+            html2canvas(table).then((tableCanvas) => {
+              const link = document.createElement("a");
+              link.href = tableCanvas.toDataURL("image/png");
+              link.download = "chat-log.png";
+              link.click();
+            });
+
+            // Download analysis graph as image
+            html2canvas(analysisCanvas).then((graphCanvas) => {
+              const link = document.createElement("a");
+              link.href = graphCanvas.toDataURL("image/png");
+              link.download = "attendance-analysis.png";
+              link.click();
+            });
+          });
+
+        // Example function to add a new login entry
+        function addLoginEntry(name, time, gender) {
+          attendanceData.push({ name, time, gender });
+          updateChart(
+            attendanceData,
+            document.getElementById("analysisSelect").value
+          );
+        }
+
+        // Example: Add a new login entry dynamically
+        addLoginEntry("Dave", "2024-07-01 08:15:00", "male");
       });
     </script>
   </head>
@@ -59,12 +219,8 @@
         <h1>STAFF LOG</h1>
       </div>
       <div class="login-form">
-        <label for="name">Enter your name:</label>
-        <input type="text" id="name" placeholder="Your name" />
-
         <label for="password">Enter your password:</label>
-        <input type="password" id="password" placeholder="Your password" />
-
+        <input type="password" id="password" placeholder="Your id Number" />
         <button id="loginButton">Login</button>
       </div>
       <h1>Login System</h1>
@@ -82,12 +238,20 @@
           </tbody>
         </table>
       </div>
+      <div class="analysis-container">
+        <h2>Attendance Analysis</h2>
+        <select id="analysisSelect">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+        <div id="analysisSummary"></div>
+        <canvas id="attendanceChart" width="400" height="200"></canvas>
+      </div>
       <footer>
         <small>Welcome to the National Elections Commission</small>
       </footer>
     </div>
-    <script type="module">
-      document.addEventListener("DOMContentLoaded", () => {});
-    </script>
   </body>
 </html>
