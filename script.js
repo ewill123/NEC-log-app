@@ -381,7 +381,6 @@ function getAllUsers() {
     { name: "Josephus V. Jallah", password: "0031" },
   ];
 }
-
 // Main login handler
 async function handleLogin(event) {
   event.preventDefault();
@@ -411,6 +410,7 @@ async function handleLogin(event) {
     loginAttempts++;
     showNotification("Invalid password. Please try again.", true);
   }
+  document.getElementById("password").value = "";
 }
 
 // Clear chat log and localStorage
@@ -480,7 +480,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch(function (error) {
         console.error("Error accessing the camera: ", error);
         showNotification(
-          "Error accessing the camera. Please check your camera settings.",
+          "Error accessisng the camera. Please check your camera settings.",
           true
         );
       });
