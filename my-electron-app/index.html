@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEC-log-app</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.1.0/docx.min.js"
+    ></script>
+    <script defer src="script.js"></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"
+    ></script>
+    <script defer src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/tesseract.js@2.3.0/dist/tesseract.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"
+    ></script>
+    <script
+      defer 
+      src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include Chart.js -->
+    <script>
+     
+    </script>
+  </head>
+  <body>
+    <!-- Notification div -->
+    <div id="notification" class="notification hidden"></div>
+
+    <div class="photo">
+      <video id="video" width="320" height="240" autoplay></video>
+      <canvas
+        id="canvas"
+        width="320"
+        height="240"
+        style="display: none"
+      ></canvas>
+      <h1>PLEASE LOOK AT THE CAMERA</h1>
+    </div>
+    <header>
+      <button id="clearLogButton">Clear Log</button>
+      <button id="downloadButton">Download Log</button>
+    </header>
+    <div class="container">
+      <div class="header">
+        <a href="https://www.necliberia.org">
+          <img src="nec.jpeg" alt="Logo" class="logo" />
+        </a>
+        <h1>STAFF LOG</h1>
+      </div>
+      <div class="login-form">
+        <label for="password">Enter your password:</label>
+        <input type="password" id="password" placeholder="Your id Number" />
+        <button id="loginButton">Login</button>
+      </div>
+      <h1>Login System</h1>
+      <div id="chatLogContainer">
+        <table id="chatLogTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Date</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Logs will be appended here -->
+          </tbody>
+        </table>
+      </div>
+      
+      <footer>
+        <small>Welcome to the National Elections Commission</small>
+      </footer>
+    </div>
+  </body>
+</html>
