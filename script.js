@@ -1,6 +1,8 @@
 let loginAttempts = 0;
 let isAdminLoggedIn = false;
 
+
+
 document.getElementById("loginButton").addEventListener("click", handleLogin);
 document.getElementById("clearLogButton").addEventListener("click", clearLog);
 document.getElementById("downloadButton").addEventListener("click", downloadLog);
