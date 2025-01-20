@@ -113,6 +113,7 @@ function getAllUsers() {
     { name: "Morris G. Wei", password: "0380" },
     { name: "Musulyn L. Kollie", password: "0172" },
     { name: "Eric S. Krayee", password: "0426" },
+     { name: "Elsie G. Yarkpai", password: "0330" },
     { name: "Anthony Sengbe", password: "0060" },
     { name: "Frederick W. Sonpon", password: "0020" },
     { name: "Francis G. Subah", password: "0045" },
